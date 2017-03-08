@@ -1,0 +1,33 @@
+
+*{
+  box-sizing: border-box;
+}
+
+body{
+  background-image: url('media/woodbar.jpg');
+  background-size: 100%;
+}
+
+
+.dealer-layer {
+
+  margin-top: 17%;
+  margin-left: 17%;
+  font-weight: bolder;
+}
+
+
+.buttons {
+  text-align: center;
+  margin-top: 13%;
+
+}
+
+.hand {
+  background-color: white;
+  opacity: .2;
+  width: 70vw;
+  height: 10vw;
+
+
+}

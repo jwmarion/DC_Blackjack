@@ -26,17 +26,11 @@ function calculatePoints(cards){
     if (e.point > 10 ) {
       e.point = 10;
     }
-
     else if (e.point === 1) {
       ace++;
       e.point = 11;
     }
-
     total += e.point;
-
-
-
-
   });
   for (var i = 0; i < ace; i++) {
     if (total > 21) {

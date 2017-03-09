@@ -6,12 +6,12 @@ var deck = newDeck();
 
 
 dealCards(playerHand);
-console.log(deck);
-console.log(playerHand);
+dealCards(playerHand);
 draw();
 
   function getCardImageUrl(inp){
     name = '';
+    console.log(inp.point);
     if(inp.point >=2 && inp.point <=10){
       name = inp.point;
     }
@@ -78,36 +78,13 @@ draw();
     return d;
   }
 
-  function draw(){
-
-
-    playerHand.forEach(function(e){
-      var x = '';
-      console.log(e);
-       switch(e.suit){
-         case 0:
-           x='spades';
-           break;
-         case 1:
-           x='hearts';
-           break;
-         case 2:
-           x='clubs';
-           break;
-         case 3:
-           x='diamonds';
-           break;
-      }
-      console.log('<img src=./cards/' + e.point + '_' + x + '.png');
-      $('#player-hand').append('<img src=./cards/' + e.point + '_' + x + '.png');
-    });
-  }
   // function draw(){
   //
   //
-  //   for(var n=0; n < playerHand.length; n++){
+  //   playerHand.forEach(function(e){
+  //     console.log(e[0].point);
   //     var x = '';
-  //      switch(playerHand[n][1]){
+  //      switch(e.suit){
   //        case 0:
   //          x='spades';
   //          break;
@@ -121,12 +98,22 @@ draw();
   //          x='diamonds';
   //          break;
   //     }
-  //         console.log('<img src=./cards/' + playerHand[n][0] + '_' + x + '.png');
-  //   }
-  //
-  //
-  //     // $('#player-hand').append('<img src=./cards/' + e.point + '_' + x + '.png');
-  //   }
+  //     console.log('<img src=./cards/' + e.point + '_' + x + '.png');
+  //     $('#player-hand').append('<img src=./cards/' + e.point + '_' + x + '.png');
+  //   });
+  // }
+  function draw(){
+    console.log(playerHand);
+
+    for(var n=0; n < playerHand.length; n++){
+      console.log(playerHand[n][1]);
+        console.log('<img src=./cards/' + playerHand[n].point + '_' + playerHand[n].suit + '.png');
+      $('#player-hand').append('<img class =\'card\'src=./cards/' + playerHand[n].point + '_' + playerHand[n].suit + '.png>');
+    }
+
+
+
+    }
 
 
 
@@ -141,8 +128,10 @@ draw();
   function dealCards(player){
     var r = (Math.floor(
    Math.random() * deck.length));
-
-    player.push(deck.splice(r,1));
+   var t = deck.splice(r,1);
+   //console.log(t[0]);
+   //console.log(Object.values(t)[0]);
+   player.push(Object.values(t)[0]);
   }
 
 });

@@ -24,10 +24,14 @@ body{
 }
 
 .hand {
-  background-color: white;
-  opacity: .2;
+  background-color: rgba(255,255,255,0.2);
+  /*background-color: white;
+  opacity: .2;*/
   width: 70vw;
   height: 10vw;
 
 
+}
+
+.card{
 }

@@ -5,32 +5,29 @@
     <title>Blackjack</title>
     <script src="jquery.js"></script>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css?family=Titillium+Web" rel="stylesheet">
+
     <script src="./script.js"></script>
   </head>
   <body>
     <div id="table">
-      <div id="messages"></div>
+      <img src="./media/21.png" id="titlecards">
 
+      <div id="messages">Black Jack </div>
       <div class="dealer-layer">
-      <label>Dealer: </label>
-      <label id="dealer-points" class="points"></label>
-      <div id="dealer-hand" class="hand">
+        <label>Dealer: </label>
+        <label id="dealer-points" class="points"></label>
+        <div id="dealer-hand" class="hand"></div>
+        <label>Player: </label>
+        <label id="player-points" class="points"></label>
+        <div id="player-hand" class="hand"></div>
       </div>
-
-      <label>Player: </label>
-      <label id="player-points" class="points"></label>
-      <div id="player-hand" class="hand">
-
-
-      </div>
-
-    </div>
-
-
       <div class="buttons">
-        <button id="deal-button">Deal</button>
-        <button id="hit-button">Hit</button>
-        <button id="stand-button">Stand</button>
+      <img class="button" id="deal-button" src="./media/dealbutton.png" alt="">
+      <img class="button" id="hit-button" src="./media/hitbutton.png" alt="">
+      <img class="button" id="stand-button" src="./media/stand-button.png" alt="">
+         <!-- onclick="window.location.reload() -->
+      <img class="button" id="reset-button" src="./media/reset.png" onclick="window.location.reload()" alt="">
       </div>
     </div>
   </body>

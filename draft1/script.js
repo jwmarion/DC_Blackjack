@@ -1,83 +1,49 @@
 $(document).ready(function () {
-  var playerHand = [];
-  var dealerHand =[];
-  var deck = newDeck();
-  var dealt = false;
-  var playerScore = 0;
-  var dealerScore = 0;
-  var pturn = true;
 
-  draw();
-   $('#reset-button').hide();
-
-  $('.buttons').on('click','#deal-button', function(e){
-    if(dealt === false){
-    initialDeal();
-    dealt = true;
-    }
-    scoring();
-    draw();
-  });
-
-  $('.buttons').on('click','#hit-button', function(e){
-    if (playerScore < 21) {
-      dealCards(playerHand);
-      scoring();
-      draw();
-      draw();
-    }
-    if (playerScore > 21){
-      $('#messages').text('You Dead!');
-      $('#reset-button').show();
-      pturn = false;
-    }
-  });
-
-  $('.buttons').on('click','#stand-button', function(e){
-    if (pturn === true){
-      pturn = false;
-      dealerTurn();
-
-    }
-  });
-
-  // $('.buttons').on('click', '#reset-button', function(e){
-  //
-  // });
-
-  function dealerTurn(){
-    while (dealerScore < 17 ) {
-      dealCards(dealerHand);
-      scoring();
-      draw();
-
-    }
-
-    if ( playerScore < 21) {
-      while(dealerScore < playerScore) {
-        dealCards(dealerHand);
-        scoring();
-        draw();
+  function Card(point, suit){
+    this.point = point;
+    this.suit=suit;
+  }
+  Card.prototype.getImageUrl = function(){
+    if(this.suit == 1 || this.suit > 10){
+      if(this.suit == 11){
+        this.suit = 'jack';
+      }
+      if(this.suit == 12){
+        this.suit = 'queen';
+      }
+      if(this.suit == 13){
+        this.suit = 'king';
+      }
+      if(this.suit == 1){
+        this.suit = 'ace';
       }
     }
-    scoring();
-    winner();
-    draw();
+    return('cards/' + this.point +'_'+ this.suit+'.png');
+  };
 
+  function Hand(){
+    this.cards = [];
   }
 
-  function calculatePoints(cards){
-    var total = 0;
+  Hand.prototype.addCard = function(card){
+    this.cards.push(card);
+  };
+
+  Hand.prototype.getPoints = function(){
+    var total =0;
     var ace = 0;
-    cards.forEach(function(e){
+    this.cards.forEach(function(e){
+      console.log('test');
+      var x = e.point;
       if (e.point > 10 ) {
-        e.point = 10;
+        x = 10;
       }
       else if (e.point === 1) {
         ace++;
-        e.point = 11;
+        x = 11;
       }
-      total += e.point;
+      total += x;
     });
     for (var i = 0; i < ace; i++) {
       if (total > 21) {
@@ -85,112 +51,204 @@ $(document).ready(function () {
       }
     }
     return total;
+  };
+
+  function Deck(){
+    this.cards = [];
+
+    for(var i = 1; i<=13; i++){
+      this.cards.push(new Card(i,'diamonds'));
+      this.cards.push(new Card(i,'hearts'));
+      this.cards.push(new Card(i,'clubs'));
+      this.cards.push(new Card(i,'spades'));
+    }
   }
 
-  function newDeck(deck){
-    var d = [];
+  Deck.prototype.draw = function(){
+    var card = this.cards.pop();
+    return card;
+  };
 
-    for(var num = 1; num<=13; num++){
-      for(var s = 0; s<4; s++){
-       var x = '';
-        switch(s){
-          case 0:
-            x='spades';
-            break;
-          case 1:
-            x='hearts';
-            break;
-          case 2:
-            x='clubs';
-            break;
-          case 3:
-            x='diamonds';
-            break;
-        }
-        d.push({point: num, suit: x});
+  Deck.prototype.numCardsLeft=function(){
+    return this.cards.length;
+  };
+
+  Deck.prototype.shuffle=function(){
+    var currentIndex = this.cards.length,  temporaryValue, randomIndex;
+
+    while (0 !== currentIndex) {
+
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+
+      // And swap it with the current element.
+      temporaryValue = this.cards[currentIndex];
+      this.cards[currentIndex] = this.cards[randomIndex];
+      this.cards[randomIndex] = temporaryValue;
+    }
+  };
+
+  function deal(){
+    console.log('test1');
+    initialDeal();
+    drawBoard(true);
+    disableButton('deal');
+  }
+
+  function hit(){
+    if (pHand.getPoints() < 21) {
+      pHand.addCard(deck.draw());
+      drawBoard(true);
+      if (pHand.getPoints() > 21){
+        stand();
       }
     }
-    return d;
   }
-  //
-  // function scoring(){
-  //   console.log(playerHand);
-  //   playerScore = playerHand.reduce(function(a,b){return a.point + b.point;});
-  // }
 
-function scoring(){
-  playerScore = calculatePoints(playerHand);
-  dealerScore = calculatePoints(dealerHand);
-}
+  function stand(){
+    disableButton('hit');
+    disableButton('stand');
+    dealerTurn();
+  }
 
-
-
-  function draw(){
+  function drawBoard(dturn){
 
     $('#dealer-hand').children().remove();
     $('#player-hand').children().remove();
+    pHand.cards.forEach(function(e){
+      $('#player-hand').append('<img class="card" src=' +e.getImageUrl()+'>');
+    });
 
-    for(var n=0; n < playerHand.length; n++){
-
-      $('#player-hand').append('<img class =\'card\'src=./cards/' + playerHand[n].point + '_' + playerHand[n].suit + '.png>');
-    }
-
-    for(var n=0; n < dealerHand.length; n++){
-
-      if (n === 0 && pturn === true){
-        var back = Math.floor((Math.random() * 9) +1);
-        console.log('<img class =\'card\'src=./cards/back' + back+'.png>');
-        $('#dealer-hand').append('<img class =\'card\'src=./cards/back' + back+'.png>');
+    dHand.cards.forEach(function(e,i){
+      if (dturn === true && i === 0){
+          $('#dealer-hand').append('<img class="card" src=./cards/back5.png>');
       }
       else{
-        console.log('<img class =\'card\'src=./cards/' + dealerHand[n].point + '_' + dealerHand[n].suit + '.png>');
-        $('#dealer-hand').append('<img class =\'card\'src=./cards/' + dealerHand[n].point + '_' + dealerHand[n].suit + '.png>');
+        $('#dealer-hand').append('<img class="card" src=' +e.getImageUrl()+'>');
+
       }
+    });
+
+    $('#player-points').text(pHand.getPoints());
+    if (dturn !== true){
+      $('#dealer-points').text(dHand.getPoints());
     }
-    $('#player-points').text(playerScore);
-  console.log('test');
-  console.log(pturn);
-    if (pturn === false){
-      console.log('test2');
-    $('#dealer-points').text(dealerScore);
+    else{
+      $('#dealer-points').text("");
+    }
+  }
+
+  function disableButton(button){
+    if (button === 'deal'){
+      $('#deal-button').css('opacity','0.6');
+      $('#deal-button').css('pointerEvents','none');
+    }
+    else if (button === 'hit'){
+      $('#hit-button').css('opacity','0.6');
+      $('#hit-button').css('pointerEvents','none');
+    }
+    else if (button === 'stand'){
+      $('#stand-button').css('opacity','0.6');
+      $('#stand-button').css('pointerEvents','none');
+    }
+    else if (button === 'reset'){
+      $('#reset-button').css('opacity','0.6');
+      $('#reset-button').css('pointerEvents','none');
+    }
+  }
+  function enableButton(button){
+    if (button === 'deal'){
+      $('#deal-button').css('opacity','1');
+      $('#deal-button').css('pointerEvents','auto');
+    }
+    else if (button === 'hit'){
+      $('#hit-button').css('opacity','1');
+      $('#hit-button').css('pointerEvents','auto');
+    }
+    else if (button === 'stand'){
+      $('#stand-button').css('opacity','1');
+      $('#stand-button').css('pointerEvents','auto');
+    }
+    else if (button === 'reset'){
+      $('#reset-button').css('opacity','1');
+      $('#reset-button').css('pointerEvents','auto');
     }
   }
 
   function initialDeal(){
-    for (var i = 0; i<2; i++){
-      dealCards(playerHand);
-      dealCards(dealerHand);
-    }
+    deck.shuffle();
+    pHand.addCard(deck.draw());
+    dHand.addCard(deck.draw());
+    pHand.addCard(deck.draw());
+    dHand.addCard(deck.draw());
+
   }
 
-
-  function dealCards(player){
-    var r = (Math.floor(
-   Math.random() * deck.length));
-   var t = deck.splice(r,1);
-   player.push(Object.values(t)[0]);
-  }
-
-  function winner(){
-    if (playerScore <= 21 && playerScore > dealerScore || playerScore <= 21 && dealerScore > 21) {
-      //fireworks
-      $('#messages').text('You win!$$$');
-       $('#reset-button').show();
-      $('body').css('background-image','url(./media/fireworks.gif)')
+  function winCheck(){
+    if (pHand.getPoints() <= 21 && pHand.getPoints() > dHand.getPoints() || pHand.getPoints() <= 21 && dHand.getPoints() > 21) {
+      $('#messages').text('You win!');
+      $('body').css('background-image','url(./media/fireworks.gif)');
     }
-    else if(playerScore > 21 && dealerScore > 21 || playerScore == dealerScore){
+    else if(pHand.getPoints() > 21 && dHand.getPoints() > 21 || pHand.getPoints() == dHand.getPoints()){
       $('#messages').text('DRAW!');
-       $('#reset-button').show();
+    }else{
+        $('#messages').text('You Lose!');
     }
-    else{
-      $('#messages').text('You Dead!');
-       $('#reset-button').show();
-    }
+      enableButton('reset');
+  }
 
+  function reset(){
+    deck = new Deck();
+    dHand = new Hand();
+    pHand = new Hand();
+
+    $('body').css('background-image','url(media/woodbar2.jpg)');
+    $('#messages').text('BlackJack');
+
+    enableButton('hit');
+    enableButton('stand');
+    enableButton('deal');
+    disableButton('reset');
+    drawBoard();
+  }
+
+  function dealerTurn(){
+    while (dHand.getPoints() < 17 ) {
+      dHand.addCard(deck.draw());
+      drawBoard();
+    }
+    if (pHand.getPoints() < 21) {
+      while(dHand.getPoints() < pHand.getPoints()) {
+        dHand.addCard(deck.draw());
+        drawBoard();
+      }
+    }
+    winCheck();
+    drawBoard();
   }
 
 
+//listeners
+  $('.buttons').on('click','#deal-button', function(e){
+    deal();
+  });
 
+  $('.buttons').on('click','#hit-button', function(e){
+    hit();
+  });
+
+  $('.buttons').on('click','#stand-button', function(e){
+    stand();
+  });
+
+  $('.buttons').on('click','#reset-button', function(e){
+    reset();
+  });
+
+  var deck = new Deck();
+  var dHand = new Hand();
+  var pHand = new Hand();
 
 
 });

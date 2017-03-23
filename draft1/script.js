@@ -24,6 +24,8 @@ $(document).ready(function () {
 
   function Hand(){
     this.cards = [];
+    this.energy = 10;
+    this.health = 16;
   }
 
   Hand.prototype.addCard = function(card){
@@ -51,6 +53,10 @@ $(document).ready(function () {
       }
     }
     return total;
+  };
+
+  Hand.prototype.attack= function(player, damage){
+    player.health -= damage;
   };
 
   function Deck(){
@@ -94,6 +100,9 @@ $(document).ready(function () {
     initialDeal();
     drawBoard(true);
     disableButton('deal');
+    enableButton('hit');
+    enableButton('stand');
+
   }
 
   function hit(){
@@ -141,19 +150,19 @@ $(document).ready(function () {
 
   function disableButton(button){
     if (button === 'deal'){
-      $('#deal-button').css('opacity','0.6');
+      $('#deal-button').css('opacity','0.3');
       $('#deal-button').css('pointerEvents','none');
     }
     else if (button === 'hit'){
-      $('#hit-button').css('opacity','0.6');
+      $('#hit-button').css('opacity','0.3');
       $('#hit-button').css('pointerEvents','none');
     }
     else if (button === 'stand'){
-      $('#stand-button').css('opacity','0.6');
+      $('#stand-button').css('opacity','0.3');
       $('#stand-button').css('pointerEvents','none');
     }
     else if (button === 'reset'){
-      $('#reset-button').css('opacity','0.6');
+      $('#reset-button').css('opacity','0.33');
       $('#reset-button').css('pointerEvents','none');
     }
   }
@@ -174,6 +183,14 @@ $(document).ready(function () {
       $('#reset-button').css('opacity','1');
       $('#reset-button').css('pointerEvents','auto');
     }
+    else if (button === 'attack'){
+      $('#attack-button').css('opacity','1');
+      $('#attack-button').css('pointerEvents','auto');
+    }
+    else if (button === 'guard'){
+      $('#guard-button').css('opacity','1');
+      $('#guard-button').css('pointerEvents','auto');
+    }
   }
 
   function initialDeal(){
@@ -183,17 +200,22 @@ $(document).ready(function () {
     pHand.addCard(deck.draw());
     dHand.addCard(deck.draw());
 
+
   }
 
   function winCheck(){
     if (pHand.getPoints() <= 21 && pHand.getPoints() > dHand.getPoints() || pHand.getPoints() <= 21 && dHand.getPoints() > 21) {
       $('#messages').text('You win!');
-      $('body').css('background-image','url(./media/fireworks.gif)');
+      pHand.energy += 3;
+      dHand.energy -=1;
+
     }
     else if(pHand.getPoints() > 21 && dHand.getPoints() > 21 || pHand.getPoints() == dHand.getPoints()){
       $('#messages').text('DRAW!');
     }else{
         $('#messages').text('You Lose!');
+        dHand.energy += 3;
+        pHand.energy -= 1;
     }
       enableButton('reset');
   }
@@ -203,7 +225,6 @@ $(document).ready(function () {
     dHand = new Hand();
     pHand = new Hand();
 
-    $('body').css('background-image','url(media/woodbar2.jpg)');
     $('#messages').text('BlackJack');
 
     enableButton('hit');
@@ -249,6 +270,8 @@ $(document).ready(function () {
   var deck = new Deck();
   var dHand = new Hand();
   var pHand = new Hand();
-
+  disableButton('hit');
+  disableButton('stand');
+  disableButton('reset');
 
 });

@@ -10,24 +10,45 @@
     <script src="./script.js"></script>
   </head>
   <body>
-    <div id="table">
-      <img src="./media/21.png" id="titlecards">
+    <div class="content">
+      <!-- <div id="table"> -->
+        <!-- <img src="./media/21.png" id="titlecards"> -->
+        <div class="dealer-layer">
+          <label>Dealer: </label>
+          <label id="dealer-points" class="points"></label>
+          <div id="dealer-hand" class="hand"></div>
+          <label>Player: </label>
+          <label id="player-points" class="points"></label>
+          <div id="player-hand" class="hand"></div>
+        </div>
 
-      <div id="messages">Black Jack </div>
-      <div class="dealer-layer">
-        <label>Dealer: </label>
-        <label id="dealer-points" class="points"></label>
-        <div id="dealer-hand" class="hand"></div>
-        <label>Player: </label>
-        <label id="player-points" class="points"></label>
-        <div id="player-hand" class="hand"></div>
-      </div>
-      <div class="buttons">
-      <img class="button" id="deal-button" src="./media/dealbutton.png" alt="">
-      <img class="button" id="hit-button" src="./media/hitbutton.png" alt="">
-      <img class="button" id="stand-button" src="./media/stand-button.png" alt="">
-      <img class="button" id="reset-button" src="./media/reset.png" alt="">
-      </div>
+        <div class="buttons">
+          <img class="button" id="deal-button" src="./media/deal.png" alt="">
+          <img class="button" id="hit-button" src="./media/hit.png" alt="">
+          <img class="button" id="stand-button" src="./media/stand.png" alt="">
+          <img class="button" id="reset-button" src="./media/reset.png" alt="">
+          <img class="button" id="attack-button" src="./media/attack.png" alt="">
+          <img class="button" id="guard-button" src="./media/guard.png" alt="">
+          <div class="gambleRow">
+            <span id="energy">Energy:</span>
+
+          </div>
+        </div>
+        <div id="messages">BlackJack</div>
+        <div class="arena">
+          <div class="rHP">
+            Robobobot
+          </div>
+          <div class="gHP">
+          Non-copyright lizard man
+          </div>
+        </div>
+        <div class="robotRange">
+          <img class="fighters" id="robot" src="./media/robot.png" alt="">
+          <img class="fighters" id="godzilla" src="./media/godzilla.png" alt="">
+        </div>
+
+      <!-- </div> -->
     </div>
   </body>
 </html>
